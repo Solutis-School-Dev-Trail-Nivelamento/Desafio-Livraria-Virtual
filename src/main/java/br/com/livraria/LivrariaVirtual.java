@@ -92,4 +92,75 @@ public class LivrariaVirtual {
             }
         }
     }
+
+    public void realizarVenda() {
+        if (numVendas >= MAX_VENDAS){
+            System.out.println("Limite máximo de vendas atingido.");
+            return;
+        }
+
+        try {
+            Scanner scanner = new Scanner(System.in);
+
+            System.out.println("Nome do cliente: ");
+            String cliente = scanner.nextLine();
+
+            System.out.println("Tipo de livro (1 - Impresso, 2 - Eletrônico): ");
+            int tipoLivro = scanner.nextInt();
+            listarLivros(tipoLivro);
+
+            System.out.println("Escolha o ID do livro: ");
+            int idLivro = scanner.nextInt();
+
+            System.out.println("Quantidade de livros a comprar: ");
+            int quantidadeLivros = scanner.nextInt();
+
+            Livro livroEscolhido = em.find(Livro.class, idLivro);
+            em.getTransaction().begin();
+
+            if (livroEscolhido != null) {
+                if (tipoLivro == 1) {
+                    Impresso impresso = (Impresso) livroEscolhido;
+                    Venda venda = new Venda();
+
+                    if (impresso.getEstoque() >= quantidadeLivros) {
+
+                        impresso.atualizarEstoque(quantidadeLivros);
+
+                        registrarVenda(venda, impresso, cliente, quantidadeLivros);
+
+                        System.out.println("Venda realizada com sucesso!");
+                        numVendas++;
+                    } else {
+                        System.out.println("Estoque insuficiente para essa quantidade de livros.");
+                    }
+                } else if (tipoLivro == 2) {
+                    Eletronico eletronico = (Eletronico) livroEscolhido;
+                    Venda venda = new Venda();
+
+                    registrarVenda(venda, eletronico, cliente, quantidadeLivros);
+
+                    System.out.println("Venda realizada com sucesso!");
+                    numVendas++;
+                } else {
+                    System.out.println("Tipo de livro inválido.");
+                }
+            } else {
+                System.out.println("Livro não encontrado!");
+            }
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            e.printStackTrace();
+        }
+    }
+
+    private void registrarVenda(Venda venda, Livro livro, String cliente, int quantidadeLivros) {
+        venda.setCliente(cliente);
+        venda.setValor(venda.getValor() + livro.getPreco() * quantidadeLivros);
+        venda.getLivros().add(livro);
+
+        em.persist(venda);
+        em.getTransaction().commit();
+    }
+    
 }
