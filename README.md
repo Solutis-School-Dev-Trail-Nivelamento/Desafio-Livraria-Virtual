@@ -2,6 +2,15 @@
 
 Este é um sistema de gerenciamento de livraria que permite o cadastro de livros impressos e eletrônicos, realização de vendas, listagem de livros e vendas, além de registrar o estoque, preço e frete dos livros.
 
+## Squad 3:
+- Beatriz Azevedo: Classe Livro
+- Filipe Sobreira: Classe Vendas
+- Heloisa Felizardo Campos: Classes Impresso e Eletronico
+- Vinicius Leão : Classe LivraviaVirtual
+- Vitor Hugo: Classe LivrariaVirtual
+- Lucas Cardeal: Classe LivrariaVirtual
+
+
 ## Funcionalidades Principais
 
 - Cadastro de livros (Impressos e Eletrônicos)
