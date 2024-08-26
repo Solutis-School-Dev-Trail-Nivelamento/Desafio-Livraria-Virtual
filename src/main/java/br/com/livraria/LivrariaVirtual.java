@@ -6,6 +6,7 @@ import util.EntityManagerUtil;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.List;
 
 public class LivrariaVirtual {
     private static final int MAX_IMPRESSOS = 10;
@@ -162,5 +163,121 @@ public class LivrariaVirtual {
         em.persist(venda);
         em.getTransaction().commit();
     }
-    
+
+    public void listarLivrosImpressos() {
+        List<Impresso> impressosList = em.createQuery("SELECT i FROM Impresso i", Impresso.class).getResultList();
+
+        if (impressosList.isEmpty()) {
+            System.out.println("Nenhum livro impresso encontrado.");
+        } else {
+            System.out.println("===========================");
+            System.out.println("Livros Impressos:");
+            for (Impresso impresso : impressosList) {
+                System.out.println("ID: " + impresso.getId());
+                System.out.println("Título: " + impresso.getTitulo());
+                System.out.println("Autores: " + impresso.getAutores());
+                System.out.println("Editora: " + impresso.getEditora());
+                System.out.println("Preço: " + impresso.getPreco());
+                System.out.println("Estoque: " + impresso.getEstoque());
+                System.out.println("===========================");
+            }
+        }
+    }
+
+    public void listarLivrosEletronicos() {
+        List<Eletronico> eletronicosList = em.createQuery("SELECT e FROM Eletronico e", Eletronico.class).getResultList();
+
+        if (eletronicosList.isEmpty()) {
+            System.out.println("Nenhum livro eletrônico encontrado.");
+        } else {
+            System.out.println("Livros Eletrônicos:");
+            for (Eletronico eletronico : eletronicosList) {
+                System.out.println("ID: " + eletronico.getId());
+                System.out.println("Título: " + eletronico.getTitulo());
+                System.out.println("Autores: " + eletronico.getAutores());
+                System.out.println("Editora: " + eletronico.getEditora());
+                System.out.println("Preço: " + eletronico.getPreco());
+                System.out.println("Tamanho: " + eletronico.getTamanho() + " KB");
+                System.out.println("===========================");
+            }
+        }
+    }
+
+    public void listarLivros(int tipoLivro) {
+        if (tipoLivro == 1) {
+            listarLivrosImpressos();
+        } else if (tipoLivro == 2) {
+            listarLivrosEletronicos();
+        } else {
+            listarLivrosImpressos();
+            listarLivrosEletronicos();
+        }
+    }
+
+    public void listarVendas() {
+        List<Venda> vendasList = em.createQuery("SELECT v FROM Venda v", Venda.class).getResultList();
+
+        for (Venda venda : vendasList) {
+            System.out.println("Venda Número: " + venda.getId());
+            System.out.println("Cliente: " + venda.getCliente());
+            System.out.println("Valor: " + venda.getValor());
+
+            System.out.println("Livros Vendidos:");
+            for (Livro livro : venda.getLivros()) {
+                System.out.println("- " + livro.getTitulo() + " (" + livro.getClass().getSimpleName() + ")");
+            }
+            System.out.println(); // Linha em branco para separar as vendas
+        }
+    }
+
+    public void exibirMenu() {
+        Scanner scanner = new Scanner(System.in);
+        int opcao;
+
+        do {
+            System.out.println("\nMenu:");
+            System.out.println("1. Cadastrar Livro");
+            System.out.println("2. Realizar Venda");
+            System.out.println("3. Listar Livros");
+            System.out.println("4. Listar Vendas");
+            System.out.println("5. Sair");
+            System.out.print("Escolha uma opção: ");
+
+            try {
+                opcao = scanner.nextInt();
+                scanner.nextLine();
+                switch (opcao) {
+                    case 1:
+                        cadastrarLivro();
+                        break;
+                    case 2:
+                        realizarVenda();
+                        break;
+                    case 3:
+                        System.out.println("1. Livros Impressos");
+                        System.out.println("2. Livros Eletrônicos");
+                        int tipoLivro = scanner.nextInt();
+                        listarLivros(tipoLivro);
+                        break;
+                    case 4:
+                        listarVendas();
+                        break;
+                    case 5:
+                        System.out.println("Saindo...");
+                        break;
+                    default:
+                        System.out.println("Opção inválida!");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Entrada inválida. Por favor, insira um número.");
+                scanner.nextLine();
+                opcao = 0; // Definir opção para um valor inválido para continuar no loop
+            }
+        } while (opcao != 5);
+    }
+
+    public static void main(String[] args) {
+        LivrariaVirtual livraria = new LivrariaVirtual();
+        livraria.exibirMenu();
+    }
 }
