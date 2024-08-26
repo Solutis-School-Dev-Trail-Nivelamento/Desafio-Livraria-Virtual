@@ -1,4 +1,25 @@
-# Desafio – Livraria Virtual
+# Desafio – Sistema de Gerenciamento de Livraria Virtual
+
+Este é um sistema de gerenciamento de livraria que permite o cadastro de livros impressos e eletrônicos, realização de vendas, listagem de livros e vendas, além de registrar o estoque, preço e frete dos livros.
+
+## Funcionalidades Principais
+
+- Cadastro de livros (Impressos e Eletrônicos)
+- Realização de vendas de livros
+- Listagem de livros disponíveis
+- Listagem das vendas realizadas
+
+## Pré-requisitos
+
+- Java 20
+- MySQL
+
+## Instalação e Execução
+
+1. Clone este repositório para o seu sistema local:
+2. Navegue até o diretório do projeto:
+3. Compile e execute o projeto:
+
 
 ## 1. Introdução
 Este projeto consiste em implementar um sistema de gerenciamento de uma livraria virtual, explorando os conceitos de composição, herança e polimorfismo. O sistema deve seguir o diagrama de classes UML mostrado abaixo, onde os construtores e os métodos de acesso (getters e setters) foram omitidos:
